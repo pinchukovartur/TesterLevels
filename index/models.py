@@ -70,9 +70,26 @@ class TestSecretKey(models.Model):
     levels = models.ManyToManyField(LevelFile, through=LevelFile.keys.through, blank=True)
     key_pub_date = models.DateTimeField(null=False, default=get_date_now, verbose_name="key release date",)
     key_active_date = models.DateTimeField(null=True, verbose_name="key activation date",)
+    groups = models.ManyToManyField('KeyGroup', blank=True)
 
     def __str__(self):
         return self.secret_key
 
     class Meta:
         ordering = ('secret_key',)
+
+
+class KeyGroup(models.Model):
+    """
+    Model for group secrets keys
+    """
+    title = models.CharField(max_length=35, null=False, verbose_name="Group Name", help_text="max size: 35",)
+    keys = models.ManyToManyField(TestSecretKey, through=TestSecretKey.groups.through, blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('title',)
+
+

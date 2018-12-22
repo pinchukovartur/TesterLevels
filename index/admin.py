@@ -8,7 +8,7 @@ date: 13.10.17
 # frameworks
 from django.contrib import admin
 # project models
-from .models import TestSecretKey, LevelFile
+from .models import TestSecretKey, LevelFile, KeyGroup
 
 
 class TestSecretKeyAdmin(admin.ModelAdmin):
@@ -20,7 +20,7 @@ class TestSecretKeyAdmin(admin.ModelAdmin):
     # adds a small sort by date
     date_hierarchy = 'key_pub_date'
     # create filter for manyToMany relation field
-    filter_horizontal = ("levels",)
+    filter_horizontal = ("levels", "groups",)
     # add full info about entity
     list_display = ("title", "secret_key", "lifetime", "status", "key_pub_date", "key_active_date")
 
@@ -38,6 +38,16 @@ class LevelFileAdmin(admin.ModelAdmin):
     # add full info about entity
     list_display = ("level_name", "level_file", "level_pub_date")
 
+
+class KeyGroupAdmin(admin.ModelAdmin):
+    """
+    The class edit view admin panel for KeyGroup model
+    """
+    # create filter for manyToMany relation field
+    filter_horizontal = ("keys",)
+
+
 # register edit classes on admin panel
 admin.site.register(TestSecretKey, TestSecretKeyAdmin)
 admin.site.register(LevelFile, LevelFileAdmin)
+admin.site.register(KeyGroup, KeyGroupAdmin)
